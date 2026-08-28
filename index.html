@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Battleship vs AI</title>
+  <link rel="stylesheet" href="style.css?v=17">
+</head>
+<body>
+  <main>
+    <h1>Battleship vs AI</h1>
+    <div class="settings">
+      <label for="difficulty">Difficulty</label>
+      <select id="difficulty">
+        <option value="Easy">Easy</option>
+        <option value="Medium" selected>Medium</option>
+        <option value="Hard">Hard</option>
+      </select>
+      <label for="sound-toggle">Sound</label>
+      <input id="sound-toggle" type="checkbox">
+      <button id="new-game" type="button">New game</button>
+    </div>
+    <p class="phase-label" id="status">Loading...</p>
+    <section class="placement" id="placement" aria-label="Placement">
+      <div class="board-wrap">
+        <h2>Your fleet</h2>
+        <div class="board" id="human-board" role="grid" aria-label="Human board"></div>
+      </div>
+      <div class="controls">
+        <h2>Ships</h2>
+        <div class="roster" id="ship-roster" role="list" aria-label="Ship roster"></div>
+        <div class="actions">
+          <button id="rotate-btn" type="button">Rotate (R)</button>
+          <button id="random-btn" type="button">Randomize</button>
+          <button id="clear-btn" type="button">Clear</button>
+          <button id="confirm-btn" type="button" disabled>Confirm fleet</button>
+        </div>
+      </div>
+    </section>
+    <section class="battle hidden" id="battle" aria-label="Battle">
+      <div class="battle-boards">
+        <div class="board-wrap">
+          <h2>Your fleet</h2>
+          <div class="board" id="human-fleet" role="grid" aria-label="Your fleet"></div>
+          <div class="fleet-list" id="human-fleet-list"></div>
+        </div>
+        <div class="board-wrap">
+          <h2>Enemy waters</h2>
+          <div class="board" id="enemy-waters" role="grid" aria-label="Enemy waters"></div>
+          <div class="fleet-list" id="enemy-fleet-list"></div>
+        </div>
+      </div>
+      <div class="log-wrap">
+        <h2>Combat log</h2>
+        <div class="log" id="game-log" aria-live="polite"></div>
+      </div>
+    </section>
+    <section class="end hidden" id="end-screen" aria-label="Game over">
+      <h2 id="end-title"></h2>
+      <p id="end-message"></p>
+      <button id="play-again" type="button">Play again</button>
+    </section>
+  </main>
+  <script src="battleship.js?v=17"></script>
+  <script src="ui.js?v=17"></script>
+</body>
+</html>
