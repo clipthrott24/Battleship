@@ -189,6 +189,21 @@ const Battleship = (() => {
 
   function cellKey(c) { return `${c.r},${c.c}`; }
 
+  function consecutiveRuns(values) {
+    const sorted = [...values].sort((a, b) => a - b);
+    const runs = [];
+    let start = sorted[0];
+    let prev = sorted[0];
+    for (let i = 1; i <= sorted.length; i++) {
+      const v = sorted[i];
+      if (v === prev + 1) { prev = v; continue; }
+      if (prev > start) runs.push([start, prev]);
+      start = v;
+      prev = v;
+    }
+    return runs;
+  }
+
   function huntTarget(shots, unresolved) {
     const line = new Map();
     const byRow = new Map();
@@ -200,9 +215,7 @@ const Battleship = (() => {
       byCol.get(c).push(r);
     }
     for (const [r, cols] of byRow) {
-      if (cols.length >= 2) {
-        const min = Math.min(...cols);
-        const max = Math.max(...cols);
+      for (const [min, max] of consecutiveRuns(cols)) {
         const left = { r, c: min - 1 };
         const right = { r, c: max + 1 };
         if (isValidTarget(shots, left.r, left.c)) line.set(cellKey(left), left);
@@ -210,9 +223,7 @@ const Battleship = (() => {
       }
     }
     for (const [c, rows] of byCol) {
-      if (rows.length >= 2) {
-        const min = Math.min(...rows);
-        const max = Math.max(...rows);
+      for (const [min, max] of consecutiveRuns(rows)) {
         const top = { r: min - 1, c };
         const bottom = { r: max + 1, c };
         if (isValidTarget(shots, top.r, top.c)) line.set(cellKey(top), top);
@@ -281,9 +292,9 @@ const Battleship = (() => {
   }
 
   function aiChooseCell(game) {
+    if (game.difficulty === 'Easy') return randomCell(game.aiShots);
     const unresolved = getUnresolvedHits(game.aiShots);
     if (unresolved.length > 0) return huntTarget(game.aiShots, unresolved);
-    if (game.difficulty === 'Easy') return randomCell(game.aiShots);
     if (game.difficulty === 'Medium') return randomCell(game.aiShots);
     return densityTarget(game.aiShots, game.humanFleet);
   }
